@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="AI Sanitization, Hospital Hygiene, Sanitization Monitoring, Healthcare Technology" />
+    <meta name="description" content="AI-powered sanitization monitoring system for hospital seat hygiene" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Favicon -->
+    <link id='favicon' rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2771/2771401.png" type="image/x-png">
+    <title>AI Sanitization System | Hospital Hygiene Monitoring</title>
+    <style>
+        /* Auth Page Styles */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .auth-left {
+            flex: 1;
+            background-color: #1f8ceb;
+            color: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .auth-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-left p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 80%;
+        }
+        
+        .auth-left img {
+            max-width: 80%;
+            margin-top: 2rem;
+        }
+        
+        .auth-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            background-color: #f5f6fa;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #95a5a6;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            color: #1f8ceb;
+            border-bottom: 3px solid #1f8ceb;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #1f8ceb;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .auth-btn:hover {
+            background-color: #0d6ec5;
+        }
+        
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #95a5a6;
+        }
+        
+        .auth-footer a {
+            color: #1f8ceb;
+            text-decoration: none;
+        }
+        
+        .user-type-selector {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .user-type-option {
+            flex: 1;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-type-option.active {
+            background-color: #1f8ceb;
+            color: white;
+        }
+        
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: rgb(200, 39, 39);
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .chatbot-container.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .chatbot-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background-color: white;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chatbot-send-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .chatbot-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Base Styles */
+        :root {
+            --primary: #1f8ceb;
+            --primary-dark: #0d6ec5;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #34495e;
+            --light: #f5f6fa;
+            --gray: #95a5a6;
+            --white: #ffffff;
+            --black: #000000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-decoration: none;
+            list-style-type: none;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        body.hide-scrolling {
+            overflow-y: hidden;
+        }
+        
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        body::-webkit-scrollbar-track {
+            background-color: var(--white);
+        }
+        
+        body::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 5rem;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: var(--white);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        header .logo i {
+            margin-right: 0.5rem;
+        }
+        
+        header .navbar ul {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        header .navbar ul li a {
+            font-size: 1.1rem;
+            color: var(--dark);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        
+        header .navbar ul li a.active,
+        header .navbar ul li a:hover {
+            color: var(--primary);
+        }
+        
+        #menu {
+            font-size: 2.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            display: none;
+        }
+        
+        /* Section Common Styles */
+        section {
+            min-height: 100vh;
+            padding: 8rem 8% 2rem;
+        }
+        
+        .heading {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .heading span {
+            color: var(--primary);
+        }
+        
+        .qoute {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+        
+        /* Home Section */
+        .home {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5rem;
+        }
+        
+        .home .content {
+            max-width: 60rem;
+        }
+        
+        .home .content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .home .content h2 span {
+            color: var(--primary);
+        }
+        
+        .home .content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .home .content .typing-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .home .image img {
+            width: 100%;
+            animation: float 3s linear infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0rem);
+            }
+            50% {
+                transform: translateY(-2rem);
+            }
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary);
+            border-radius: 0.5rem;
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Box Container */
+        .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .box {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: 0.3s;
+        }
+        
+        .box:hover {
+            transform: translateY(-0.5rem);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .box .tag {
+            margin-bottom: 1.5rem;
+        }
+        
+        .box .tag h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        .box .desc p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        /* About Section */
+        .about .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5rem;
+            flex-wrap: wrap;
+        }
+        
+        .about .row .image {
+            flex: 1 1 40rem;
+        }
+        
+        .about .row .image img {
+            width: 100%;
+        }
+        
+        .about .row .content {
+            flex: 1 1 40rem;
+        }
+        
+        .about .row .content h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .about .row .content .tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: var(--light);
+            border-radius: 0.5rem;
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .about .row .content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+        
+        /* Skills Section */
+        .skills .container {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Work Section */
+        .work .box-container .box {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Footer Section */
+        .footer {
+            background: var(--dark);
+            padding: 3rem 8%;
+        }
+        
+        .footer .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer .box-container .box h3 {
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer .box-container .box p,
+        .footer .box-container .box a {
+            font-size: 1.1rem;
+            color: var(--gray);
+            display: block;
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+        
+        .footer .box-container .box a:hover {
+            color: var(--primary);
+            transform: translateX(0.5rem);
+        }
+        
+        .footer .box-container .box .share {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .footer .box-container .box .share a {
+            width: 4rem;
+            height: 4rem;
+            line-height: 4rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+        
+        .footer .box-container .box .share a:hover {
+            background: var(--primary);
+            transform: translateX(0);
+        }
+        
+        .footer .credit {
+            text-align: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 0.1rem solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Scroll Top Button */
+        #scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 4rem;
+            height: 4rem;
+            line-height: 4rem;
+            text-align: center;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 1.5rem;
+            border-radius: 50%;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        
+        #scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        #scroll-top:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 0.1rem solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--dark);
+            transition: 0.3s;
+        }
+        
+        .form-group input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+        
+        .form-group input[type="range"] {
+            width: 100%;
+        }
+        
+        /* Status Indicators */
+        .status-active {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .status-inactive {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        /* Sanitization System Specific Styles */
+        .sanitization-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .seat-card {
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        .seat-card.clean {
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .seat-card.dirty {
+            border-color: var(--danger);
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.3);
+        }
+        
+        .seat-card.in-progress {
+            border-color: var(--warning);
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+        }
+        
+        .status-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .clean .status-indicator {
+            background-color: var(--secondary);
+        }
+        
+        .dirty .status-indicator {
+            background-color: var(--danger);
+        }
+        
+        .in-progress .status-indicator {
+            background-color: var(--warning);
+        }
+        
+        .seat-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-panel {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-panel i {
+            font-size: 1.5rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-card.clean {
+            background-color: var(--secondary);
+        }
+        
+        .stat-card.dirty {
+            background-color: var(--danger);
+        }
+        
+        .stat-card.in-progress {
+            background-color: var(--warning);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .camera-feed {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Alert List Styles */
+        .alert-list {
+            margin-top: 2rem;
+        }
+        
+        .alert-item {
+            background: var(--white);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-priority {
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .alert-priority.high {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .alert-priority.medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .alert-priority.low {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .alert-time {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .alert-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            header {
+                padding: 1.5rem 5%;
+            }
+            
+            section {
+                padding: 8rem 5% 2rem;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            html {
+                font-size: 90%;
+            }
+            
+            .home {
+                flex-direction: column-reverse;
+                gap: 3rem;
+            }
+            
+            .home .content {
+                max-width: 100%;
+            }
+            
+            .home .image {
+                max-width: 60rem;
+                margin: 0 auto;
+            }
+            
+            .auth-container {
+                flex-direction: column;
+            }
+            
+            .auth-left, .auth-right {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #menu {
+                display: block;
+            }
+            
+            header .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                padding: 1rem 5%;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: 0.3s;
+            }
+            
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            header .navbar ul {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 450px) {
+            html {
+                font-size: 80%;
+            }
+            
+            .box-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .auth-tab {
+                border-bottom: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<!-- Auth Section (shown by default) -->
+<div id="auth-section" class="auth-container">
+    <div class="auth-left">
+        <h1>Hospital Sanitization Monitoring</h1>
+        <p>AI-powered system to ensure patient safety and hospital hygiene through real-time sanitization tracking</p>
+        <img src="https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8441.jpg" alt="Hospital Illustration">
+    </div>
+    
+    <div class="auth-right">
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+            <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="login-form" class="auth-form active">
+            <div class="user-type-selector">
+                <div class="user-type-option active" onclick="selectUserType('patient')">Patient</div>
+                <div class="user-type-option" onclick="selectUserType('caretaker')">Caretaker</div>
+            </div>
+            
+            <form id="patient-login">
+                <div class="form-group">
+                    <label for="patient-email">Email</label>
+                    <input type="email" id="patient-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-password">Password</label>
+                    <input type="password" id="patient-password" required>
+                </div>
+                <button type="submit" class="auth-btn">Login as Patient</button>
+            </form>
+            
+            <form id="caretaker-login" style="display: none;">
+                <div class="form-group">
+                    <label for="caretaker-email">Email</label>
+                    <input type="email" id="caretaker-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-password">Password</label>
+                    <input type="password" id="caretaker-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-id">Staff ID</label>
+                    <input type="text" id="caretaker-id" required>
+                </div>
+                <button type="submit" class="auth-btn">Login as Caretaker</button>
+            </form>
+            
+            <div class="auth-footer">
+                <a href="#" onclick="switchTab('signup')">Don't have an account? Sign up</a>
+            </div>
+        </div>
+        
+        <!-- Signup Form -->
+        <div id="signup-form" class="auth-form">
+            <div class="user-type-selector">
+                <div class="user-type-option active" onclick="selectUserType('patient', 'signup')">Patient</div>
+                <div class="user-type-option" onclick="selectUserType('caretaker', 'signup')">Caretaker</div>
+            </div>
+            
+            <form id="patient-signup">
+                <div class="form-group">
+                    <label for="patient-signup-name">Full Name</label>
+                    <input type="text" id="patient-signup-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-signup-email">Email</label>
+                    <input type="email" id="patient-signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-signup-password">Password</label>
+                    <input type="password" id="patient-signup-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-signup-confirm">Confirm Password</label>
+                    <input type="password" id="patient-signup-confirm" required>
+                </div>
+                <button type="submit" class="auth-btn">Sign Up as Patient</button>
+            </form>
+            
+            <form id="caretaker-signup" style="display: none;">
+                <div class="form-group">
+                    <label for="caretaker-signup-name">Full Name</label>
+                    <input type="text" id="caretaker-signup-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-signup-email">Email</label>
+                    <input type="email" id="caretaker-signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-signup-password">Password</label>
+                    <input type="password" id="caretaker-signup-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-signup-confirm">Confirm Password</label>
+                    <input type="password" id="caretaker-signup-confirm" required>
+                </div>
+                <div class="form-group">
+                    <label for="caretaker-signup-id">Staff ID</label>
+                    <input type="text" id="caretaker-signup-id" required>
+                </div>
+                <button type="submit" class="auth-btn">Sign Up as Caretaker</button>
+            </form>
+            
+            <div class="auth-footer">
+                <a href="#" onclick="switchTab('login')">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content (hidden by default) -->
+<div id="main-content" style="display: none;">
+    <!-- navbar starts -->
+    <header>
+        <a href="/" class="logo"><i class="fas fa-hospital"></i> Sanitization AI</a>
+
+        <div id="menu" class="fas fa-bars"></div>
+        <nav class="navbar">
+            <ul>
+                <li><a class="active" href="#dashboard">Dashboard</a></li>
+                <li><a href="#monitoring">Live Monitoring</a></li>
+                <li><a href="#alerts">Alerts</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- navbar ends -->
+
+    <!-- dashboard section starts -->
+    <section class="home" id="dashboard">
+        <div class="content">
+            <h2>Hospital Sanitization <span>Monitoring</span></h2>
+            <p>AI-powered system to ensure <span class="typing-text"></span></p>
+            
+            <div class="stats-container">
+                <div class="stat-card clean">
+                    <h3>Clean Seats</h3>
+                    <div class="stat-value" id="clean-count">24</div>
+                    <p>Ready for patients</p>
+                </div>
+                <div class="stat-card dirty">
+                    <h3>Needs Cleaning</h3>
+                    <div class="stat-value" id="dirty-count">5</div>
+                    <p>Require attention</p>
+                </div>
+                <div class="stat-card in-progress">
+                    <h3>In Progress</h3>
+                    <div class="stat-value" id="progress-count">3</div>
+                    <p>Being sanitized</p>
+                </div>
+            </div>
+            
+            <div class="alert-panel" id="urgent-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>URGENT: 2 seats have exceeded maximum time without sanitization</span>
+            </div>
+            
+            <div class="dashboard-header">
+                <h3><i class="fas fa-procedures"></i> Seat Status Overview</h3>
+                <div>
+                    <select id="ward-filter" class="form-control">
+                        <option value="all">All Wards</option>
+                        <option value="emergency">Emergency</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="oncology">Oncology</option>
+                        <option value="orthopedics">Orthopedics</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="sanitization-container" id="seats-container">
+                <!-- Seat cards will be dynamically generated here -->
+            </div>
+        </div>
+        <div class="image">
+            <img draggable="false" class="tilt" src="https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8441.jpg" alt="Hospital Ward">
+        </div>
+    </section>
+    <!-- dashboard section ends -->
+
+    <!-- live monitoring section starts -->
+    <section class="about" id="monitoring">
+        <h2 class="heading"><i class="fas fa-video"></i> Live <span>Monitoring</span></h2>
+        
+        <div class="row">
+            <div class="image">
+                <img draggable="false" class="tilt" src="https://img.freepik.com/free-vector/security-camera-concept-illustration_114360-1994.jpg" alt="AI Camera Monitoring">
+            </div>
+            <div class="content">
+                <h3>Real-time Sanitization Tracking</h3>
+                <span class="tag">AI-Powered Detection</span>
+                
+                <p>Our system uses computer vision to monitor cleaning activities in real-time. 
+                  The AI detects proper sanitization actions like wiping, spraying disinfectant, 
+                  and changing protective covers. Each verified cleaning is logged with timestamp 
+                  and staff ID for accountability.</p>
+                
+                <div class="camera-feed-container">
+                    <img src="https://via.placeholder.com/800x450?text=Live+Camera+Feed" alt="Live Camera Feed" class="camera-feed" id="live-feed">
+                    <div class="action-buttons">
+                        <button class="btn btn-small" id="refresh-feed"><i class="fas fa-sync-alt"></i> Refresh</button>
+                        <button class="btn btn-small" id="fullscreen-feed"><i class="fas fa-expand"></i> Fullscreen</button>
+                    </div>
+                </div>
+                
+                <div class="box-container">
+                    <div class="box">
+                        <p><span> Last Sanitization: </span> <span id="last-sanitization">2 minutes ago</span></p>
+                        <p><span> Current Staff: </span> <span id="current-staff">Nurse Jackson (ID: NJ-204)</span></p>
+                    </div>
+                    <div class="box">
+                        <p><span> Detection Accuracy: </span> 98.7%</p>
+                        <p><span> System Status: </span> <span class="status-active">Active</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- live monitoring section ends -->
+
+    <!-- alerts section starts -->
+    <section class="skills" id="alerts">
+        <h2 class="heading"><i class="fas fa-bell"></i> Sanitization <span>Alerts</span></h2>
+
+        <div class="container">
+            <div class="alert-panel" id="critical-alert">
+                <i class="fas fa-skull-crossbones"></i>
+                <span>CRITICAL: Seat 12 in Oncology has been occupied 3 times without sanitization</span>
+                <button class="btn btn-small" style="float: right;">Acknowledge</button>
+            </div>
+            
+            <div class="alert-list">
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-priority high">High</span>
+                        <span class="alert-time">10:42 AM</span>
+                    </div>
+                    <div class="alert-content">
+                        <p>Seat 8 in Emergency was not properly sanitized after patient discharge</p>
+                        <div class="action-buttons">
+                            <button class="btn btn-small"><i class="fas fa-check"></i> Mark as Clean</button>
+                            <button class="btn btn-small"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-priority medium">Medium</span>
+                        <span class="alert-time">09:15 AM</span>
+                    </div>
+                    <div class="alert-content">
+                        <p>Incomplete sanitization detected at Seat 15 in Pediatrics</p>
+                        <div class="action-buttons">
+                            <button class="btn btn-small"><i class="fas fa-check"></i> Mark as Clean</button>
+                            <button class="btn btn-small"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-priority low">Low</span>
+                        <span class="alert-time">Yesterday, 4:30 PM</span>
+                    </div>
+                    <div class="alert-content">
+                        <p>Sanitization supplies running low in Orthopedics ward</p>
+                        <div class="action-buttons">
+                            <button class="btn btn-small"><i class="fas fa-check"></i> Resolved</button>
+                            <button class="btn btn-small"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- alerts section ends -->
+
+    <!-- reports section starts -->
+    <section class="education" id="reports">
+        <h1 class="heading"><i class="fas fa-chart-bar"></i> Sanitization <span>Reports</span></h1>
+        <p class="qoute">Data-driven insights for continuous improvement of hospital hygiene standards.</p>
+
+        <div class="box-container">
+            <div class="box">
+                <div class="image">
+                    <img draggable="false" src="https://via.placeholder.com/400x250?text=Compliance+Chart" alt="Compliance Chart">
+                </div>
+                <div class="content">
+                    <h3>Daily Compliance Report</h3>
+                    <p>Shows sanitization compliance rates across all wards</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-small"><i class="fas fa-download"></i> Download PDF</button>
+                        <button class="btn btn-small"><i class="fas fa-share"></i> Share</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="image">
+                    <img draggable="false" src="https://via.placeholder.com/400x250?text=Staff+Performance" alt="Staff Performance">
+                </div>
+                <div class="content">
+                    <h3>Staff Performance</h3>
+                    <p>Tracking of cleaning staff efficiency and completion rates</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-small"><i class="fas fa-download"></i> Download PDF</button>
+                        <button class="btn btn-small"><i class="fas fa-share"></i> Share</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="box">
+                <div class="image">
+                    <img draggable="false" src="https://via.placeholder.com/400x250?text=Trend+Analysis" alt="Trend Analysis">
+                </div>
+                <div class="content">
+                    <h3>Weekly Trend Analysis</h3>
+                    <p>Identifies patterns and improvement opportunities</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-small"><i class="fas fa-download"></i> Download PDF</button>
+                        <button class="btn btn-small"><i class="fas fa-share"></i> Share</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- reports section ends -->
+
+    <!-- settings section starts -->
+    <section class="work" id="settings">
+        <h2 class="heading"><i class="fas fa-cog"></i> System <span>Settings</span></h2>
+
+        <div class="box-container">
+            <div class="box tilt">
+                <div class="content">
+                    <div class="tag">
+                        <h3>Notification Preferences</h3>
+                    </div>
+                    <div class="desc">
+                        <form id="notification-settings">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="email-alerts" checked> Email Alerts
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="sms-alerts"> SMS Alerts
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="push-notifications" checked> Push Notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>Alert Threshold:
+                                    <select name="alert-threshold">
+                                        <option value="immediate">Immediate</option>
+                                        <option value="5min" selected>5 minutes</option>
+                                        <option value="15min">15 minutes</option>
+                                        <option value="30min">30 minutes</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box tilt">
+                <div class="content">
+                    <div class="tag">
+                        <h3>Camera Configuration</h3>
+                    </div>
+                    <div class="desc">
+                        <form id="camera-settings">
+                            <div class="form-group">
+                                <label>Camera Sensitivity:
+                                    <input type="range" name="sensitivity" min="1" max="10" value="7">
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="motion-detection" checked> Motion Detection
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="object-recognition" checked> Object Recognition
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>Recording Duration:
+                                    <select name="recording-duration">
+                                        <option value="30min">30 minutes</option>
+                                        <option value="1hour" selected>1 hour</option>
+                                        <option value="2hours">2 hours</option>
+                                        <option value="4hours">4 hours</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn">Save Configuration</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- settings section ends -->
+
+    <!-- footer section starts -->
+    <section class="footer">
+        <div class="box-container">
+            <div class="box">
+                <h3>AI Sanitization System</h3>
+                <p>Ensuring hospital hygiene through AI-powered monitoring. Reducing infections and building patient trust with technology.</p>
+            </div>
+
+            <div class="box">
+                <h3>quick links</h3>
+                <a href="#dashboard"><i class="fas fa-chevron-circle-right"></i> Dashboard</a>
+                <a href="#monitoring"><i class="fas fa-chevron-circle-right"></i> Live Monitoring</a>
+                <a href="#alerts"><i class="fas fa-chevron-circle-right"></i> Alerts</a>
+                <a href="#reports"><i class="fas fa-chevron-circle-right"></i> Reports</a>
+                <a href="#settings"><i class="fas fa-chevron-circle-right"></i> Settings</a>
+            </div>
+
+            <div class="box">
+                <h3>contact info</h3>
+                <p> <i class="fas fa-headset"></i> Support: 24/7</p>
+                <p> <i class="fas fa-envelope"></i> support@sanitizationai.com</p>
+                <p> <i class="fas fa-map-marked-alt"></i> Healthcare Technology Solutions</p>
+                <div class="share">
+                    <a href="#" class="fab fa-linkedin" aria-label="LinkedIn" target="_blank"></a>
+                    <a href="#" class="fab fa-twitter" aria-label="Twitter" target="_blank"></a>
+                    <a href="#" class="fas fa-envelope" aria-label="Mail" target="_blank"></a>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="credit">AI Sanitization Monitoring System | © 2023 All Rights Reserved</h1>
+    </section>
+    <!-- footer section ends -->
+
+    <!-- scroll top btn -->
+    <a href="#dashboard" aria-label="ScrollTop" class="fas fa-angle-up" id="scroll-top"></a>
+</div>
+
+<!-- ==== ALL MAJOR JAVASCRIPT CDNS STARTS ==== -->
+<!-- jquery cdn -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- typed.js cdn -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.5/typed.min.js" integrity="sha512-1KbKusm/hAtkX5FScVR5G36wodIMnVd/aP04af06iyQTkD17szAMGNmxfNH+tEuFp3Og/P5G32L1qEC47CZbUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- vanilla tilt.js links -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js" integrity="sha512-SttpKhJqONuBVxbRcuH0wezjuX+BoFoli0yPsnrAADcHsQMW8rkR84ItFHGIkPvhnlRnE2FaifDOUw+EltbuHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- scroll reveal anim -->
+<script src="https://unpkg.com/scrollreveal"></script>
+
+<!-- ==== ALL MAJOR JAVASCRIPT CDNS ENDS ==== -->
+
+<script>
+    // Global variables
+    let seatData = [
+        { id: 1, ward: 'emergency', status: 'clean', lastCleaned: '10 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+1' },
+        { id: 2, ward: 'emergency', status: 'dirty', lastCleaned: '2 hours ago', image: 'https://via.placeholder.com/200x120?text=Seat+2' },
+        { id: 3, ward: 'pediatrics', status: 'clean', lastCleaned: '15 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+3' },
+        { id: 4, ward: 'pediatrics', status: 'in-progress', lastCleaned: '45 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+4' },
+        { id: 5, ward: 'oncology', status: 'dirty', lastCleaned: '3 hours ago', image: 'https://via.placeholder.com/200x120?text=Seat+5' },
+        { id: 6, ward: 'oncology', status: 'clean', lastCleaned: '5 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+6' },
+        { id: 7, ward: 'orthopedics', status: 'in-progress', lastCleaned: '30 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+7' },
+        { id: 8, ward: 'orthopedics', status: 'dirty', lastCleaned: '1 hour ago', image: 'https://via.placeholder.com/200x120?text=Seat+8' },
+        { id: 9, ward: 'emergency', status: 'clean', lastCleaned: '20 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+9' },
+        { id: 10, ward: 'pediatrics', status: 'clean', lastCleaned: '25 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+10' },
+        { id: 11, ward: 'oncology', status: 'dirty', lastCleaned: '4 hours ago', image: 'https://via.placeholder.com/200x120?text=Seat+11' },
+        { id: 12, ward: 'oncology', status: 'dirty', lastCleaned: '5 hours ago', image: 'https://via.placeholder.com/200x120?text=Seat+12' },
+        { id: 13, ward: 'orthopedics', status: 'clean', lastCleaned: '10 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+13' },
+        { id: 14, ward: 'emergency', status: 'in-progress', lastCleaned: '50 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+14' },
+        { id: 15, ward: 'pediatrics', status: 'clean', lastCleaned: '5 minutes ago', image: 'https://via.placeholder.com/200x120?text=Seat+15' },
+    ];
+
+    // Auth functionality
+    function switchTab(tabName) {
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.classList.remove('active');
+        });
+        
+        document.querySelector(`.auth-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+        document.getElementById(`${tabName}-form`).classList.add('active');
+    }
+    
+    function selectUserType(userType, formType = 'login') {
+        const options = document.querySelectorAll(`#${formType}-form .user-type-option`);
+        options.forEach(option => option.classList.remove('active'));
+        
+        const activeOption = document.querySelector(`#${formType}-form .user-type-option[onclick="selectUserType('${userType}', '${formType}')"]`);
+        activeOption.classList.add('active');
+        
+        if (formType === 'login') {
+            if (userType === 'patient') {
+                document.getElementById('patient-login').style.display = 'block';
+                document.getElementById('caretaker-login').style.display = 'none';
+            } else {
+                document.getElementById('patient-login').style.display = 'none';
+                document.getElementById('caretaker-login').style.display = 'block';
+            }
+        } else {
+            if (userType === 'patient') {
+                document.getElementById('patient-signup').style.display = 'block';
+                document.getElementById('caretaker-signup').style.display = 'none';
+            } else {
+                document.getElementById('patient-signup').style.display = 'none';
+                document.getElementById('caretaker-signup').style.display = 'block';
+            }
+        }
+    }
+    
+    // Handle form submissions
+    document.getElementById('patient-login').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('patient-email').value;
+        const password = document.getElementById('patient-password').value;
+        
+        // Simple validation
+        if (email && password) {
+            // In a real app, you would validate credentials with a server
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('userType', 'patient');
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            initDashboard();
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+    
+    document.getElementById('caretaker-login').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('caretaker-email').value;
+        const password = document.getElementById('caretaker-password').value;
+        const staffId = document.getElementById('caretaker-id').value;
+        
+        // Simple validation
+        if (email && password && staffId) {
+            // In a real app, you would validate credentials with a server
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('userType', 'caretaker');
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            initDashboard();
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+    
+    document.getElementById('patient-signup').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('patient-signup-name').value;
+        const email = document.getElementById('patient-signup-email').value;
+        const password = document.getElementById('patient-signup-password').value;
+        const confirm = document.getElementById('patient-signup-confirm').value;
+        
+        if (password !== confirm) {
+            alert('Passwords do not match');
+            return;
+        }
+        
+        if (name && email && password) {
+            // In a real app, you would send this data to a server
+            alert('Patient account created successfully! Please login.');
+            switchTab('login');
+            selectUserType('patient');
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+    
+    document.getElementById('caretaker-signup').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('caretaker-signup-name').value;
+        const email = document.getElementById('caretaker-signup-email').value;
+        const password = document.getElementById('caretaker-signup-password').value;
+        const confirm = document.getElementById('caretaker-signup-confirm').value;
+        const staffId = document.getElementById('caretaker-signup-id').value;
+        
+        if (password !== confirm) {
+            alert('Passwords do not match');
+            return;
+        }
+        
+        if (name && email && password && staffId) {
+            // In a real app, you would send this data to a server
+            alert('Caretaker account created successfully! Please login.');
+            switchTab('login');
+            selectUserType('caretaker');
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+    
+    // Logout functionality
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('userType');
+        document.getElementById('auth-section').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'none';
+        switchTab('login');
+        selectUserType('patient');
+    });
+    
+    // Check if user is already logged in
+    if (localStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        initDashboard();
+    }
+    
+    // Dashboard functionality
+    function initDashboard() {
+        // Update stats
+        updateStats();
+        
+        // Render seat cards
+        renderSeats();
+        
+        // Initialize typing animation
+        initTypingEffect();
+        
+        // Initialize scroll reveal
+        initScrollReveal();
+        
+        // Initialize tilt effect
+        initTiltEffect();
+        
+        // Setup event listeners
+        setupEventListeners();
+    }
+
+    // Update statistics counters
+    function updateStats() {
+        const cleanCount = seatData.filter(seat => seat.status === 'clean').length;
+        const dirtyCount = seatData.filter(seat => seat.status === 'dirty').length;
+        const progressCount = seatData.filter(seat => seat.status === 'in-progress').length;
+        
+        document.getElementById('clean-count').textContent = cleanCount;
+        document.getElementById('dirty-count').textContent = dirtyCount;
+        document.getElementById('progress-count').textContent = progressCount;
+    }
+
+    // Render seat cards based on filter
+    function renderSeats(filter = 'all') {
+        const container = document.getElementById('seats-container');
+        container.innerHTML = '';
+        
+        const filteredSeats = filter === 'all' 
+            ? seatData 
+            : seatData.filter(seat => seat.ward === filter);
+        
+        filteredSeats.forEach(seat => {
+            const seatCard = document.createElement('div');
+            seatCard.className = `seat-card ${seat.status}`;
+            
+            let statusText = '';
+            let statusIcon = '';
+            
+            switch(seat.status) {
+                case 'clean':
+                    statusText = 'Clean';
+                    statusIcon = 'fa-check-circle';
+                    break;
+                case 'dirty':
+                    statusText = 'Dirty';
+                    statusIcon = 'fa-times-circle';
+                    break;
+                case 'in-progress':
+                    statusText = 'In Progress';
+                    statusIcon = 'fa-spinner';
+                    break;
+            }
+            
+            seatCard.innerHTML = `
+                <div class="status-indicator"><i class="fas ${statusIcon}"></i></div>
+                <img src="${seat.image}" alt="Seat ${seat.id}" class="seat-image">
+                <h4>Seat ${seat.id}</h4>
+                <p>${seat.ward.charAt(0).toUpperCase() + seat.ward.slice(1)} Ward</p>
+                <small>Last cleaned: ${seat.lastCleaned}</small>
+                <div class="action-buttons">
+                    <button class="btn btn-small" onclick="handleSeatAction(${seat.id}, 'clean')"><i class="fas fa-broom"></i></button>
+                    <button class="btn btn-small" onclick="handleSeatAction(${seat.id}, 'flag')"><i class="fas fa-flag"></i></button>
+                </div>
+            `;
+            
+            container.appendChild(seatCard);
+        });
+    }
+
+    // Handle seat actions - must be global for HTML onclick to work
+    window.handleSeatAction = function(seatId, action) {
+        const seatIndex = seatData.findIndex(seat => seat.id === seatId);
+        
+        if (seatIndex !== -1) {
+            if (action === 'clean') {
+                seatData[seatIndex].status = 'clean';
+                seatData[seatIndex].lastCleaned = 'just now';
+            } else if (action === 'flag') {
+                seatData[seatIndex].status = 'dirty';
+            }
+            
+            updateStats();
+            renderSeats(document.getElementById('ward-filter').value);
+            
+            // Show confirmation
+            const seatCard = document.querySelector(`.seat-card h4:contains("Seat ${seatId}")`)?.parentNode;
+            if (seatCard) {
+                seatCard.classList.add('highlight');
+                setTimeout(() => seatCard.classList.remove('highlight'), 1000);
+            }
+        }
+    }
+
+    // Initialize typing effect
+    function initTypingEffect() {
+        const typed = new Typed('.typing-text', {
+            strings: ['patient safety', 'hospital hygiene', 'infection control', 'clean environments'],
+            typeSpeed: 100,
+            backSpeed: 60,
+            loop: true
+        });
+    }
+
+    // Initialize scroll reveal
+    function initScrollReveal() {
+        ScrollReveal({ 
+            reset: false,
+            distance: '80px',
+            duration: 2000,
+            delay: 200
+        });
+        
+        ScrollReveal().reveal('.heading, .qoute', { origin: 'top' });
+        ScrollReveal().reveal('.image, .box-container, .stats-container', { origin: 'bottom' });
+        ScrollReveal().reveal('.content h3, .content .tag', { origin: 'left' });
+        ScrollReveal().reveal('.content p, .content .btn', { origin: 'right' });
+    }
+
+    // Initialize tilt effect
+    function initTiltEffect() {
+        VanillaTilt.init(document.querySelectorAll(".tilt"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+        });
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Mobile menu toggle
+        document.getElementById('menu').addEventListener('click', function() {
+            document.querySelector('.navbar').classList.toggle('active');
+            document.body.classList.toggle('hide-scrolling');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.navbar ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.navbar').classList.remove('active');
+                document.body.classList.remove('hide-scrolling');
+            });
+        });
+        
+        // Ward filter change
+        document.getElementById('ward-filter').addEventListener('change', function() {
+            renderSeats(this.value);
+        });
+        
+        // Refresh feed button
+        document.getElementById('refresh-feed').addEventListener('click', function() {
+            const liveFeed = document.getElementById('live-feed');
+            liveFeed.src = `https://via.placeholder.com/800x450?text=Live+Camera+Feed&t=${Date.now()}`;
+        });
+        
+        // Fullscreen feed button
+        document.getElementById('fullscreen-feed').addEventListener('click', function() {
+            const liveFeed = document.getElementById('live-feed');
+            if (liveFeed.requestFullscreen) {
+                liveFeed.requestFullscreen();
+            } else if (liveFeed.webkitRequestFullscreen) {
+                liveFeed.webkitRequestFullscreen();
+            } else if (liveFeed.msRequestFullscreen) {
+                liveFeed.msRequestFullscreen();
+            }
+        });
+        
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.getElementById('scroll-top');
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('active');
+            } else {
+                scrollTop.classList.remove('active');
+            }
+        });
+        
+        // Form submissions
+        document.getElementById('notification-settings').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Notification settings saved successfully!');
+        });
+        
+        document.getElementById('camera-settings').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Camera configuration updated successfully!');
+        });
+    }
+    
+    // Chatbot functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotUserInput = document.getElementById('chatbot-user-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+        
+        // Toggle chatbot visibility
+        chatbotToggle.addEventListener('click', function() {
+            chatbotContainer.classList.toggle('active');
+        });
+        
+        chatbotClose.addEventListener('click', function() {
+            chatbotContainer.classList.remove('active');
+        });
+        
+        // Send message function
+        function sendMessage() {
+            const userMessage = chatbotUserInput.value.trim();
+            if (userMessage) {
+                // Add user message to chat
+                addMessage(userMessage, 'user');
+                chatbotUserInput.value = '';
+                
+                // Simulate bot response after a short delay
+                setTimeout(() => {
+                    const botResponse = generateBotResponse(userMessage);
+                    addMessage(botResponse, 'bot');
+                }, 800);
+            }
+        }
+        
+        // Send message on button click or Enter key
+        chatbotSend.addEventListener('click', sendMessage);
+        chatbotUserInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender + '-message');
+            messageDiv.textContent = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Generate bot responses
+        function generateBotResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return "Hello! I'm the PatientConnect assistant. How can I help you today?";
+            } else if (lowerMessage.includes('how does') || lowerMessage.includes('work')) {
+                return "Our system uses computer vision to monitor cleaning activities in real-time, verifying sanitization actions and alerting staff when cleaning is missed.";
+            }
+            else if (lowerMessage.includes('clean') || lowerMessage.includes('sanitiz')) {
+                return "The system automatically detects proper cleaning actions like wiping, spraying disinfectant, and changing protective covers. Verified cleanings are logged with timestamps.";
+            }
+            else if (lowerMessage.includes('alert') || lowerMessage.includes('notify')) {
+                return "Alerts are triggered when: 1) Cleaning is missed after patient discharge 2) Sanitization is incomplete 3) Maximum time between cleanings is exceeded";
+            }
+            else if (lowerMessage.includes('accuracy') || lowerMessage.includes('reliable')) {
+                return "Our AI detection has 98.7% accuracy. You can adjust sensitivity in Settings > Camera Configuration if needed.";
+            }
+            else if (lowerMessage.includes('ward') || lowerMessage.includes('location')) {
+                return "You can filter seats by ward (Emergency, Pediatrics, Oncology, etc.) using the dropdown on the dashboard.";
+            }
+            else if (lowerMessage.includes('status') || lowerMessage.includes('current')) {
+                return "Seat statuses are: Green (Clean), Red (Needs Cleaning), and Yellow (In Progress). Check the dashboard for real-time updates.";
+            }
+            else if (lowerMessage.includes('report') || lowerMessage.includes('data')) {
+                return "Compliance reports are available in the Reports section, showing cleaning frequency, staff performance, and hygiene trends.";
+            }
+            else if (lowerMessage.includes('camera') || lowerMessage.includes('feed')) {
+                return "Live monitoring feeds are available in the Live Monitoring section. You can refresh or go fullscreen using the buttons.";
+            }
+            else if (lowerMessage.includes('staff') || lowerMessage.includes('cleaner')) {
+                return "The system logs which staff member performed each cleaning. Check the Live Monitoring section or reports for details.";
+            }
+            else if (lowerMessage.includes('time') || lowerMessage.includes('duration')) {
+                return "Maximum time between cleanings is configurable in Settings. Default is 2 hours for high-risk wards, 4 hours for others.";
+            }
+            else if (lowerMessage.includes('emergency') || lowerMessage.includes('critical')) {
+                return "Emergency wards have stricter cleaning protocols. The system enforces 30-minute checks after each patient and 2-hour deep cleans.";
+            }
+            else if (lowerMessage.includes('pediatr') || lowerMessage.includes('children')) {
+                return "Pediatrics uses antimicrobial coatings. The system tracks additional wipe-downs between patients and toy sanitization.";
+            }
+            else if (lowerMessage.includes('oncology') || lowerMessage.includes('cancer')) {
+                return "Oncology seats require special disinfectants. The AI verifies proper chemical use and 15-minute contact time.";
+            }
+            else if (lowerMessage.includes('orthoped') || lowerMessage.includes('cast')) {
+                return "Orthopedic seats are monitored for plaster dust removal and antimicrobial spray application after each use.";
+            }
+            else if (lowerMessage.includes('setting') || lowerMessage.includes('configure')) {
+                return "Adjust notification preferences, camera sensitivity, and cleaning protocols in the Settings section.";
+            }
+            else if (lowerMessage.includes('notification') || lowerMessage.includes('alert')) {
+                return "Choose between email, SMS, or push notifications in Settings > Notification Preferences. Urgent alerts cannot be disabled.";
+            }
+            else if (lowerMessage.includes('manual') || lowerMessage.includes('override')) {
+                return "You can manually mark seats as clean using the broom icon on the dashboard if the AI misses a cleaning.";
+            }
+            else if (lowerMessage.includes('infection') || lowerMessage.includes('MRSA')) {
+                return "The system reduces infection risk by ensuring CDC-level disinfection between patients, especially for resistant strains.";
+            }
+            else if (lowerMessage.includes('patient') || lowerMessage.includes('family')) {
+                return "Patients can view cleaning statuses on ward displays. Green indicators build trust in hospital hygiene standards.";
+            }
+            else if (lowerMessage.includes('training') || lowerMessage.includes('educate')) {
+                return "New staff receive AI-assisted training - the system provides real-time feedback during cleaning practice sessions.";
+            }
+            else if (lowerMessage.includes('supply') || lowerMessage.includes('disinfectant')) {
+                return "The system alerts when sanitization supplies run low in specific wards, based on usage patterns.";
+            }
+            else if (lowerMessage.includes('audit') || lowerMessage.includes('compliance')) {
+                return "All cleaning activities are logged with timestamps and staff IDs for JCAHO audits and quality assurance.";
+            }
+            else if (lowerMessage.includes('integrat') || lowerMessage.includes('EHR')) {
+                return "The system integrates with EHRs to link cleaning cycles with patient turnover and infection risk factors.";
+            }
+            else if (lowerMessage.includes('mobile') || lowerMessage.includes('app')) {
+                return "Staff receive alerts on hospital-issued mobile devices. Managers can monitor from any web browser.";
+            }
+            else if (lowerMessage.includes('false') || lowerMessage.includes('wrong')) {
+                return "If the AI gives incorrect statuses, manually override it and report the issue through Settings > Feedback.";
+            }
+            else if (lowerMessage.includes('history') || lowerMessage.includes('record')) {
+                return "View 90 days of cleaning history per seat in the Reports section. Full archives are available for infection investigations.";
+            }
+            else if (lowerMessage.includes('contact') || lowerMessage.includes('support')) {
+                return "For urgent issues, call our 24/7 support line at (555) 123-4567 or email support@sanitizationai.com";
+            }
+            else if (lowerMessage.includes('privacy') || lowerMessage.includes('HIPAA')) {
+                return "The system is HIPAA-compliant. Cameras focus only on seats, not patients, and all data is encrypted.";
+            }
+            else if (lowerMessage.includes('cost') || lowerMessage.includes('price')) {
+                return "Implementation costs vary by hospital size. The system typically pays for itself in reduced infection rates within 6 months.";
+            }
+            else if (lowerMessage.includes('install') || lowerMessage.includes('setup')) {
+                return "Our team handles installation in 1-2 days per ward, including camera calibration and staff training.";
+    }
+    else if (lowerMessage.includes('update') || lowerMessage.includes('upgrade')) {
+        return "The system updates automatically overnight. Major upgrades are scheduled during low-activity periods.";
+    }
+    else if (lowerMessage.includes('maintenance') || lowerMessage.includes('down')) {
+        return "Preventive maintenance occurs quarterly. The system has 99.9% uptime with redundant backups.";
+    }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        else {
+            const randomResponses = [
+                "I'm focused on sanitization monitoring. Could you rephrase your question about hospital hygiene?",
+            "For detailed sanitization protocols, check the Settings section or contact infection control.",
+            "I'm still learning! Try asking about cleaning alerts, seat statuses, or compliance reports.",
+            "That's an important question! Our support team can help at (555) 123-4567.",
+                "For detailed questions, you might want to contact our support team through the Contact page."
+            ];
+            return randomResponses[Math.floor(Math.random() * randomResponses.length)];
+        }
+    }
+    
+    // Initial bot greeting
+    setTimeout(() => {
+        if (chatbotMessages.children.length === 0) {
+            addMessage("Welcome to PatientConnect! How can I help you today?", 'bot');
+        }
+    }, 1000);
+});
+</script>
+<div id="chatbot-container" class="chatbot-container">
+    <div class="chatbot-header">
+        <h5>PatientConnect Assistant</h5>
+        <button id="chatbot-close" class="chatbot-close-btn">&times;</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages"></div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbot-user-input" placeholder="Ask about crafts or artisans...">
+        <button id="chatbot-send" class="chatbot-send-btn">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+<button id="chatbot-toggle" class="chatbot-toggle-btn">
+    <i class="fas fa-comments"></i>
+</button>
+</body>
+</html>
