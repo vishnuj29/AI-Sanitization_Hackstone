@@ -1,10 +1,16 @@
 ## AI-Powered Sanitization Monitoring System
   • An AI-based sanitization monitoring system that automatically verifies cleaning actions (wiping, spraying sanitizer) and provides real-time feedback.
+  
   • Camera-Based Monitoring
+  
   • Cameras track cleaning actions(wiping motions, spray)
+  
   • AI detects proper sanitization using computer vision.
+  
   • Real-Time Feedback:
+  
         Green Tick	on display when cleaning is verified
+        
          Red Alert	if cleaning is missed, notifying staff immediately.
 
 
