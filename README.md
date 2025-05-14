@@ -64,6 +64,12 @@ cd sanitization-monitor
 
 ## 🤝 Contributing
 Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request.
+##  Screenshot
+  ![image alt](https://github.com/vishnuj29/AI-Sanitization_Hackstone/blob/main/Screenshot%202025-05-14%20081318.png?raw=true)
+
+  ![image alt](https://github.com/vishnuj29/AI-Sanitization_Hackstone/blob/38b26f944b1eae15c9f0411e5c2fab528ab35bc4/Screenshot%202025-05-14%20081430.png)
+
+  ![image alt](https://github.com/vishnuj29/AI-Sanitization_Hackstone/blob/38b26f944b1eae15c9f0411e5c2fab528ab35bc4/Screenshot%202025-05-14%20081514.png)
 
 ## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
